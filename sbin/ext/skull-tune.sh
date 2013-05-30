@@ -1,14 +1,17 @@
 #!/sbin/busybox sh
 
-mount -o remount,rw /system
-/sbin/busybox mount -t rootfs -o remount,rw rootfs
+BB="/sbin/busybox"
 
-# Run Init Scripts
+mount -o remount,rw /system
+$BB mount -t rootfs -o remount,rw rootfs
+
+# Run init scripts
 if [ -d /system/etc/init.d ]; then
-  /sbin/busybox run-parts /system/etc/init.d
+	chmod 755 /system/etc/init.d/*
+	$BB run-parts /system/etc/init.d
 fi;
 
-# frandom hack
+# Hacked random and urandom for frandom
 mv /dev/random /dev/random.ori
 mv /dev/urandom /dev/urandom.ori
 ln /dev/frandom /dev/random
@@ -16,5 +19,5 @@ chmod 666 /dev/random
 ln /dev/frandom /dev/urandom
 chmod 666 /dev/urandom
 
-/sbin/busybox mount -t rootfs -o remount,ro rootfs
+$BB mount -t rootfs -o remount,ro rootfs
 mount -o remount,ro /system

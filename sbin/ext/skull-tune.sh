@@ -11,13 +11,16 @@ if [ -d /system/etc/init.d ]; then
 	$BB run-parts /system/etc/init.d
 fi;
 
-# Hacked random and urandom for frandom
+# Script to launch frandom at boot by Ryuinferno @ XDA
+insmod /system/lib/modules/frandom.ko
+chmod 644 /dev/frandom
+chmod 644 /dev/erandom
 mv /dev/random /dev/random.ori
 mv /dev/urandom /dev/urandom.ori
 ln /dev/frandom /dev/random
-chmod 666 /dev/random
-ln /dev/frandom /dev/urandom
-chmod 666 /dev/urandom
+chmod 644 /dev/random
+ln /dev/erandom /dev/urandom
+chmod 644 /dev/urandom
 
 $BB mount -t rootfs -o remount,ro rootfs
 mount -o remount,ro /system

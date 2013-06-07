@@ -3,10 +3,10 @@
 mount -o remount,rw /system
 
 # remount partitions with noatime
-for k in $(mount | grep relatime | cut -d " " -f3);
+for k in $(mount | grep relatime | cut -d " " -f3)
 do
-mount -o remount,noatime,nodiratime,noauto_da_alloc,barrier=0 $k
-done;
+	mount -o remount,noatime $k
+done
 
 # Setting the right script permissions
 chmod 755 /system/etc/init.d/*

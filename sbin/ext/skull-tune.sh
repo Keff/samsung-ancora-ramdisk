@@ -1,12 +1,15 @@
 #!/sbin/busybox sh
 
-mount -o remount,rw /system
+# set busybox location
+BB="/sbin/busybox"
+
+$BB mount -o rw,remount /system
 
 # remount partitions with noatime
-for k in $(mount | grep relatime | cut -d " " -f3)
+for k in $($BB mount | grep relatime | cut -d " " -f3);
 do
-	mount -o remount,noatime $k
-done
+	$BB mount -o remount,noatime $k;
+done;
 
 # Setting the right script permissions
 chmod 755 /system/etc/init.d/*
@@ -20,6 +23,6 @@ ln /dev/erandom /dev/urandom
 chmod 666 /dev/urandom
 
 # Early-init phase tweaks
-/sbin/busybox sh /sbin/ext/tweaks.sh
+$BB sh /sbin/ext/tweaks.sh
 
-mount -o remount,ro /system
+$BB mount -o ro,remount /system
